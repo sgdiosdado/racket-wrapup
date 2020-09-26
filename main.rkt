@@ -13,6 +13,13 @@
 
 (define ABB2 '(a (b (c () ()) ()) (d (e () ()) ())))
 
+(define g'(
+           (A (B 2) (D 10))
+           (B (C 9) (E 5))
+           (C (A 12) (D 6))
+           (D (E 7))
+           (E (C 3))))
+
 ; max: Recibe un árbol y devuelve el valor máximo entre los nodos
 (define (max tree)
   (cond
@@ -51,6 +58,26 @@
 ; cuenta-nivel: Recibe un árbol y un nivel deseado. Devuelve la cantidad de nodos en el nivel
 (define (cuenta-nivel n tree)
   (cuenta-nivel-aux tree n 0)
+  )
+
+
+
+; nodos-destino: Recibe un grafo y un identificador. Devuelve la cantidad de nodos destino directo del nodo con el identificador
+(define (nodos-destino g id)
+   (apply append (map (lambda (x)
+           (cond
+             [(eq? (car x) id)
+              (map (lambda (y) (car y)) (cdr x))]
+             [else '()])) g))
+  )
+
+; elimina-nodo: Elimina un nodo a partir de un identificador dado
+(define (elimina-nodo g id)
+  (apply append
+         (map (lambda (x)
+                (if (not(eq? (car x) id))
+                    (list (append (list (car x)) (apply append (map (lambda (y) (if (not(eq? (car y) id)) (list y) '())) (cdr x)))))
+                    '() )) g))
   )
 
 
